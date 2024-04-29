@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Code Editor</title>
+
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<style>
+
+
+    body{
+        margin: 0;
+    }
+/*editor styles*/
+
+.iframe-split{
+  background: white;
+ width: 50%;
+ height: 100%;
+ overflow-y: scroll;
+ overflow-x: hidden;
+}
+#code{
+ width: 100%;
+ height: 100%;
+}
+.split {
+ width:100%;
+ height:100%;
+}
+
+.div-flex{
+ display: flex;
+padding-top: 30px;
+ height: 100vh;
+}
+
+
+.editor{
+ display: flex;
+ flex-direction: column;
+ width: 50%;
+ height: 100%;
+ margin: 1px;
+
+}
+.editor textarea {
+ background: #242423;
+ height: 100%;
+ padding-top: 30px;
+ font-size: 15px;
+ padding-left: 30px;
+ padding-right: 30px;
+ overflow-y: scroll;
+ overflow-x: hidden;
+ color:lightsalmon;
+ caret-color: orange;
+ padding-bottom: 30px;
+}
+
+.demo{
+ display: none;
+}
+
+@media only screen and (max-width: 700px){
+
+.editor{
+ width: 100%;
+ height: 100%;
+}
+
+.div-flex{
+ width: 100%;
+}
+
+
+.demo{
+  border: 1px solid green;
+    border-radius: 30px;
+    position: fixed;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 8px 10px;
+    text-align: center;
+    text-transform: capitalize;
+    transition: all 0.4s ease 0s;
+ display: block;
+bottom: 50px;
+right: 20px;
+}
+.demo:hover {
+  border: 1px solid green;
+  background-color: #009900;
+  color: #fff;
+  text-decoration: none;
+}
+
+.iframe-split{
+  display: none;
+ background: white;
+ width: 100%;
+ height: 100%;
+
+}
+
+.topnav{
+        overflow-y: hidden;
+        overflow-x: scroll;
+        white-space: nowrap;
+        width: 100%;
+}
+
+}
+
+
+
+.editor textarea:focus {
+ outline: none;
+ color:orange;
+}
+
+
+
+
+/*toggle classes*/
+.hide{
+	display: none;
+}
+
+.show{
+display: block;
+}
+
+
+
+/*theme*/
+.atom_one{
+    background: maroon;
+    color: red;
+}
+
+.monakai{
+    background: black;
+    color: yellow;
+}
+
+.celeste{
+    background: steelblue;
+    color: white;
+}
+
+.sixteen{
+    background: coral;
+    color: green;
+}
+
+
+.mariana{
+    background: #242423;
+    color: lightsalmon;
+}
+
+.breaker{
+    background: papayawhip;
+    color: teal;
+}
+
+
+
+
+
+
+
+/*navbar*/
+
+#navbar {
+    width: 100%;
+    padding: 8px 10px;
+    position: fixed;
+    background:#212121;
+    color: cornsilk;
+    font-size: 15px;
+}
+
+.logo {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}
+
+
+
+/*menu nav*/
+
+
+    .topnav {
+        overflow: hidden;
+        text-decoration: none;
+        position: fixed;
+        width: 100%;
+        padding: 8px 10px;
+        display: block;
+        top: 30px;
+        background: #2e2e2e;
+        transition: top 0.3s;
+        
+      }
+    
+      
+      .topnav a {
+        left: 50%;
+        color: #f2f2f2;
+        text-align: center;
+        text-decoration: none;
+        font-size: 13px;
+        text-transform: capitalize;
+        transition: 0,4s;
+      }
+      
+      .topnav a:hover{
+        background-color: #949292;
+        cursor: pointer;
+        color: white ;
+        text-decoration: none;
+      }
+      
+
+      .dropdown {
+        float: left;
+      }
+
+      .dropbtn{
+        cursor: pointer;
+        font-size: 15px;
+        padding: 10px 20px;
+        border: none;
+        outline: none;
+        color: white;
+        font-family: sans-serif;
+        margin: 0;
+      }
+
+@media only screen and (max-width:650px){
+    .dropbtn{
+        padding: 6px 8px;
+    }
+}
+      .dropdown-content{
+        display: none;
+        position: fixed;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        margin-top: 10px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+
+      .sub-content{
+        display: none;
+        position: relative;
+        right: 20px;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+
+
+      .sub-content a{
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+
+      .dropdown-content a{
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+      }
+.dropdown-content a:hover{
+    background-color: lightgrey;
+    color: black;
+}
+
+
+.drpdown:hover .sub-content{
+    display: block;
+}
+
+
+.dropdown:hover .dropdown-content{
+    display: block;
+}
+      .drop-it{
+        display: block;
+      }
+
+      #textfind{
+        position: absolute;
+        right: 20px;
+        top: 0;
+        padding: 6px 8px;
+        border-radius: 20px;
+      }
+.highlight{
+    background-color: yellow;
+}
+
+
+</style>
+<script type="text/javascript">
+    function loadCmd(){
+        var textarea= document.getElementById("html");
+
+        textarea.focus();
+        textarea.style.textTransform=localStorage.getItem("casense");
+textarea.style.color=localStorage.getItem("themec");
+textarea.style.background=localStorage.getItem("themeb")
+
+    }
+</script>
+<body onload="loadCmd()">
+    <!-- navbar -->
+<div id="navbar">
+    <a>AL</a>
+    <a onclick="textFind()">jj</a>
+    <input type="text" id="textfind" placeholder="Search ...">
+    </div>
+        
+<script type="text/javascript">
+    
+  
+
+  function textFind(){
+    var search=document.getElementById("textfind").value;
+    var textarea=document.getElementById("html");
+    var text=textarea.value;
+    var re= new RegExp(search, "g");
+    var newtext=text.replace(re, function(match){
+        return '<span class="highlight">'+ match+ '</span';
+    })
+    textarea.innerHTML=newtext;
+  }
+
+
+  function selectAlly(){
+    var t=document.getElementById("html");
+    document.getElementById("html").selectionStart= 1;
+    document.getElementById("html").selectionEnd= 5;
+  }
+</script>
+
+<!-- menu -->
+   <div class="topnav" id="tpn">
+    <div class="dropdown">
+        <a class="dropbtn" onclick="document.getElementById('file').classList.toggle('drop-it');document.getElementById('edit').classList.remove('drop-it');document.getElementById('view').classList.remove('drop-it');document.getElementById('tools').classList.remove('drop-it');document.getElementById('terminal').classList.remove('drop-it');document.getElementById('help').classList.remove('drop-it');
+    ">File</a>
+        <div class="dropdown-content" id="file">
+           <a><label for="fileinput">Open File</label></a>
+            <input style="display:none;" type="file" id="fileinput" multiple/>
+            <a>Open folder</a>
+            <a onclick="alert('Access denied !')">Open recent</a>
+            <a onclick="New()">New</a>
+            <a onclick="alert('Saved to localstorage')">Save</a>
+            <a onclick="saveas()">Save As</a>
+            <a onclick="window.close()">Close Window</a>
+            <a onclick="window.print()">Print</a>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <a class="dropbtn" onclick="document.getElementById('edit').classList.toggle('drop-it');document.getElementById('file').classList.remove('drop-it');document.getElementById('view').classList.remove('drop-it');document.getElementById('tools').classList.remove('drop-it');document.getElementById('terminal').classList.remove('drop-it');document.getElementById('help').classList.remove('drop-it');
+    ">Edit</a>
+        <div class="dropdown-content" id="edit">
+            <a>Undo</a>
+            <a>Redo</a>
+            <a>Cut</a>
+            <a onclick="Copy()" id="cpy">Copy</a>
+            <a onclick="Paste()">Paste</a>
+            <a>Find</a>
+            <a>Sort lines</a>
+            <a>Wrap</a>
+            <a onclick="selectAlly()">Select All</a>
+            <a onclick="alert('key : ctrl + /')">Comment</a>
+
+            <select id="cases" onchange="Casep()">
+                <option>Convert Case</option>
+                <option value="lowercase">lowercase</option>
+                <option value="uppercase">UPPERCASE</option>
+                <option value="capitalize">Capitalize</option>
+                <option value="none">None</option>
+    </select>
+        </div>
+    </div>
+    <script type="text/javascript">
+        document.getElementById("fileinput").addEventListener("change", function selectedfile(){
+           
+            const reader=new FileReader();
+            reader.onload= function filereadcompleted(){
+                document.getElementById("html").value=reader.result;
+            };
+
+                reader.readAsText(this.files[0]);
+        })
+    </script>
+    <script>
+
+
+        const saveas = () => {
+    // text content
+            const textfield=document.getElementById("html").value;
+
+    const texts = [`${textfield}`]
+// file object
+    const file = new Blob(texts, {type: 'text/plain'});
+// anchor link
+    const element = document.createElement("a");
+    const userfile=prompt("Save As");
+
+    element.href = URL.createObjectURL(file);
+    element.download = `${userfile}`;
+// simulate link click
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+}
+
+ function Casep(){
+  document.getElementById("html").style.textTransform=document.getElementById("cases").value;
+
+  localStorage.setItem("casense", document.getElementById("cases").value)
+    }
+
+    </script>
+
+<script type="text/javascript">
+
+    function Copy(){
+var cpy=document.getElementById("cpy")
+        var copyText = document.getElementById("html").value;
+        navigator.clipboard.writeText(copyText);
+if(cpy.innerHTML == "Copy"){
+    setTimeout(()=>{
+
+    cpy.innerHTML="Copy";
+    },1500)
+    cpy.innerHTML="Copied"
+    }
+}
+
+ document.addEventListener("keydown", function(e){
+        if(e.ctrlKey && e.key === "/"){
+           
+            var texa =document.getElementById("html").value;
+            var tex=document.getElementById("html")
+            tex.value="<!--  -->\n"+texa
+            tex.style.color="lightgrey"
+        }
+        
+      });
+
+function Paste(){
+    navigator.clipboard.readText()
+}
+</script>
+
+            <div class="dropdown">
+        <a class="dropbtn" onclick="document.getElementById('view').classList.toggle('drop-it');document.getElementById('edit').classList.remove('drop-it');document.getElementById('file').classList.remove('drop-it');document.getElementById('tools').classList.remove('drop-it');document.getElementById('terminal').classList.remove('drop-it');document.getElementById('help').classList.remove('drop-it');
+    ">View</a>
+        <div class="dropdown-content" id="view">
+            <a onclick="alert('Access denied ! Not a developer')">Sidebar</a>
+            <a onclick="document.getElementById('tpn').style.display='none'">Hide menu</a>
+            <a>Layout</a>
+            <a onclick="alert('Already in fullscreen!')">Enter full screen</a>
+            <a>Spell Check</a>
+            <a onclick="alert('Access denied !')">Show console</a>
+        </div>
+    </div>
+
+
+
+    <div class="dropdown">
+        <a class="dropbtn" onclick="document.getElementById('tools').classList.toggle('drop-it');document.getElementById('edit').classList.remove('drop-it');document.getElementById('view').classList.remove('drop-it');document.getElementById('file').classList.remove('drop-it');document.getElementById('terminal').classList.remove('drop-it');document.getElementById('help').classList.remove('drop-it');
+    ">Tools</a>
+        <div class="dropdown-content" id="tools">
+         <a onclick="alert('Install Sublime !')">Command pallete</a>
+         <a onclick="alert('You are not a developer. Access denied')">Developer</a>
+         <a onclick="alert('Processing!')">Build with</a>
+         <a>Autosave<input type="checkbox" style="position:absolute; right: 10px;" name="" checked></a>
+         <a>Snippets</a>
+         <a onclick="alert('not ready !')">Bookmarks</a>
+        </div>
+    </div>
+
+
+    <div class="dropdown">
+        <a class="dropbtn" onclick="document.getElementById('terminal').classList.toggle('drop-it');document.getElementById('edit').classList.remove('drop-it');document.getElementById('view').classList.remove('drop-it');document.getElementById('tools').classList.remove('drop-it');document.getElementById('file').classList.remove('drop-it');document.getElementById('help').classList.remove('drop-it');
+    ">terminal</a>
+        <div class="dropdown-content" id="terminal">
+            <a>Settings</a>
+
+            <a>Customize Theme
+                <a>Bg <input id="themebg" type="color" onchange="themeB()" /></a>
+                <a>Col <input id="themecol" onchange="themeC()" type="color" /></a></a>
+            <a>Syntax</a>
+            <a>Key Bindings</a>
+
+             <div class="drpdown">
+                <a>Font</a>
+             <div class="sub-content" style="bottom:0;position: absolute;">
+         <a onclick="Lg()">Larger</a>
+         <a onclick="Sm()">Smaller</a>
+         <a onclick="Rs()">Reset</a>
+        </div>
+    </div>
+
+
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        function themeB(textarea){
+      textarea=document.getElementById("html");
+var themeb=document.getElementById("themebg").value;
+      textarea.style.background=themeb;
+localStorage.setItem("themeb",themeb)
+        }
+
+        function themeC(textarea){
+             textarea=document.getElementById("html");
+     var themec=document.getElementById("themecol").value
+      textarea.style.color=themec;
+localStorage.setItem("themec", themec)
+        }
+    </script>
+
+    <div class="dropdown">
+        <a class="dropbtn" onclick="document.getElementById('help').classList.toggle('drop-it');document.getElementById('edit').classList.remove('drop-it');document.getElementById('view').classList.remove('drop-it');document.getElementById('tools').classList.remove('drop-it');document.getElementById('terminal').classList.remove('drop-it');document.getElementById('file').classList.remove('drop-it');
+    ">Help</a>
+        <div class="dropdown-content" id="help">
+            <a href="https://www.sublimetext.com/docs/">Documentation</a>
+            <a>Enter License</a>
+            <a>About AL-Editor</a>
+            <a>Check for Updates</a>
+            <a>Report a bug</a>
+        </div>
+    </div>
+
+    
+
+    </div>
+
+
+<script type="text/javascript">
+function Lg(){
+    var textvalue= document.getElementById("html");
+
+    textvalue.style.fontSize="40px"
+} 
+
+
+function Sm(){
+    var textvalue= document.getElementById("html");
+
+    textvalue.style.fontSize="12px"
+} 
+
+
+
+function Rs(){
+    var textvalue= document.getElementById("html");
+
+    textvalue.style.fontSize="15px"
+} 
+
+
+window.onclick = function(e){
+    if(!e.target.matches('.dropbtn')){
+        var file = document.getElementById("file");
+        var edit = document.getElementById("edit");
+        var find = document.getElementById("find");
+        var view = document.getElementById("view");
+        var tools = document.getElementById("tools");
+        var terminal = document.getElementById("terminal");
+        var help = document.getElementById("help");
+
+        if(file.classList.contains('drop-it')){
+            file.classList.remove('drop-it');
+        }
+
+
+        if(edit.classList.contains('drop-it')){
+            edit.classList.remove('drop-it');
+        }
+
+
+
+        if(view.classList.contains('drop-it')){
+            view.classList.remove('drop-it');
+        }
+
+
+        if(tools.classList.contains('drop-it')){
+            tools.classList.remove('drop-it');
+        }
+
+        if(terminal.classList.contains('drop-it')){
+            terminal.classList.remove('drop-it');
+        }
+
+
+        if(help.classList.contains('drop-it')){
+            help.classList.remove('drop-it');
+        }
+    }
+}
+
+
+function New(){
+    var texa = document.getElementById("html")
+
+    texa.value ="<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n <meta name='viewport' content='width=device-width, initial-scale=1'>\n<title></title>\n</head>\n\n<body>\n\n<p>This is just a text.</p>\n\n</body>\n</html>";
+}
+</script>
+<br>
+<br>
+
+<div class="div-flex" style="background:grey;" id="edtr">
+     <button onclick="myResult()" class="demo" id="dm">Result</button>
+<div class="editor split" id="editor">
+  <textarea id="html" class="TYpe" onkeyup="Compile()" onfocus="Compile()" onclick="saveValue(this)" onvolumechange="Compile()" oninput="saveValue(this)" onblur="Compile()" onpaste="saveValue(this)"  placeholder="type your code here ..." spellcheck="false">
+
+  </textarea>
+    </div>
+
+    
+    <div class="iframe-split" id="myOut">
+    <iframe id="code"></iframe>
+    </div>
+    </div>
+
+
+
+
+<script type="text/javascript">
+function exit(){
+    document.getElementById('form').style.display='none';
+    document.getElementById('edtr').style.display='flex';
+}
+
+
+      document.getElementById("html").value = getSavedValue("html");
+
+
+
+  function saveValue(e) {
+      var id = e.id;
+      var val = e.value;
+      localStorage.setItem(id, val);
+  }
+
+  function getSavedValue(v) {
+      if (!localStorage.getItem(v)) {
+          return "";
+      }
+      return localStorage.getItem(v);
+  };
+</script>
+<br>
+
+           <!--   Footer legal --> 
+            <footer style="background-color:lightgrey;position: fixed;bottom: 0;width: 100%;">
+            <section style="color:grey;">
+                <a><i class="fa fa-fork"></i>master</a>
+                <a style="position:absolute;right:200px;">Spaces:4</a>
+                <a style="position:absolute;right:40px;">HTML</a>
+            </section>
+        </footer>
+
+
+ <script type="text/javascript">
+
+    // textarea js code
+
+function Compile() {
+    var space="<head>"
+    var texS=document.getElementById("html").value;
+  var html = document.getElementById("html");
+  var syntax=["<",">"];
+  // var css = document.getElementById("css");
+  // var js = document.getElementById("js");
+  var code = document.getElementById("code").contentWindow.document;
+  code.open();
+    code.writeln(
+      html.value 
+    );
+    code.close();
+
+   
+   
+
+}
+
+
+
+// function atomOne(){
+//     var textArea =document.getElementById("html");
+
+//     textArea.style.background="maroon";
+//      textArea.style.color="red";
+// }
+
+
+// function monokai(){
+    
+//     var textArea =document.getElementById("html");
+
+//     var bg=textArea.style.background="black";
+//      var color=textArea.style.color="yellow";
+// localStorage.setItem("monokaibg", bg);
+// localStorage.setItem("monokaicol", color)
+
+// }
+
+// function mariana(){
+
+//     var textArea =document.getElementById("html");
+
+//     textArea.style.background="#242423";
+//      textArea.style.color="lightsalmon";
+// }
+
+// function breaker(){
+
+//     var textArea =document.getElementById("html");
+
+//     textArea.style.background="papayawhip";
+//      textArea.style.color="teal";
+// }
+
+
+// function sixteen(){
+
+//     var textArea =document.getElementById("html");
+
+//     textArea.style.background="coral";
+//      textArea.style.color="green";
+// }
+
+// function celeste(){
+
+//     var textArea =document.getElementById("html");
+
+//     textArea.style.background="steelblue";
+//      textArea.style.color="white";
+// }
+
+// result button js
+
+function myResult(){
+  let result = document.getElementById("dm");
+  
+     if(result.innerHTML == "Result"){
+      result.innerHTML = "Editor";
+
+     
+     }
+     else if (result.innerHTML == "Editor") {
+      result.innerHTML = "Result";
+     }
+
+   
+ document.getElementById('myOut').classList.toggle('show');
+ document.getElementById("editor").classList.toggle('hide');
+}
+
+
+</script>
+</body>
+</html>
