@@ -305,7 +305,7 @@ display: block;
 
       #textfind{
         position: absolute;
-        right: 20px;
+        right: 70px;
         top: 0;
         padding: 6px 8px;
         border-radius: 20px;
@@ -331,30 +331,49 @@ textarea.style.background=localStorage.getItem("themeb")
     <!-- navbar -->
 <div id="navbar">
     <a>AL</a>
-    <a onclick="textFind()">jj</a>
+    <div style="display:none" id="findy">
     <input type="text" id="textfind" placeholder="Search ...">
+    <a onclick="textFind()"style="color:orange; position:absolute;right:30px;top:5px;cursor:pointer;">Search</a>
+    </div>
     </div>
         
 <script type="text/javascript">
     
   
 
+  // function textFind(){
+  //   var search=document.getElementById("textfind").value;
+  //   var textarea=document.getElementById("html");
+  //   var text=textarea.value;
+  //   var re= new RegExp(search, 'g');
+  //   var newtext=text.replace(re, "<span style='background:yellow'>$&</span>")
+
+  //   textarea.value=newtext;
+  // }
+
+
   function textFind(){
     var search=document.getElementById("textfind").value;
     var textarea=document.getElementById("html");
     var text=textarea.value;
-    var re= new RegExp(search, "g");
-    var newtext=text.replace(re, function(match){
-        return '<span class="highlight">'+ match+ '</span';
-    })
-    textarea.innerHTML=newtext;
+    var index= text.indexOf(search);
+    if(index !== -1){
+        textarea.focus();
+        textarea.setSelectionRange(index, index+search.length);
+    }
+    else{
+
+        alert("not found")
+    }
   }
+
 
 
   function selectAlly(){
     var t=document.getElementById("html");
-    document.getElementById("html").selectionStart= 1;
-    document.getElementById("html").selectionEnd= 5;
+   t.focus();
+   t.select();
+   
   }
 </script>
 
@@ -385,7 +404,7 @@ textarea.style.background=localStorage.getItem("themeb")
             <a>Cut</a>
             <a onclick="Copy()" id="cpy">Copy</a>
             <a onclick="Paste()">Paste</a>
-            <a>Find</a>
+            <a onclick="document.getElementById('findy').style.display='block'">Find</a>
             <a>Sort lines</a>
             <a>Wrap</a>
             <a onclick="selectAlly()">Select All</a>
