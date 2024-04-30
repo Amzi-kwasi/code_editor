@@ -332,9 +332,7 @@ textarea.style.background=localStorage.getItem("themeb")
 <div id="navbar">
     <a>AL</a>
     <div style="display:none" id="findy">
-    <input type="text" id="textfind" placeholder="Search ...">
-    <a onclick="textFind()"style="color:orange; position:absolute;right:30px;top:5px;cursor:pointer;">Search</a>
-    </div>
+        </div>
     </div>
         
 <script type="text/javascript">
@@ -342,7 +340,7 @@ textarea.style.background=localStorage.getItem("themeb")
   
 
   // function textFind(){
-  //   var search=document.getElementById("textfind").value;
+  //   var search=prompt("Find");
   //   var textarea=document.getElementById("html");
   //   var text=textarea.value;
   //   var re= new RegExp(search, 'g');
@@ -353,7 +351,7 @@ textarea.style.background=localStorage.getItem("themeb")
 
 
   function textFind(){
-    var search=document.getElementById("textfind").value;
+    var search=prompt("Find");
     var textarea=document.getElementById("html");
     var text=textarea.value;
     var index= text.indexOf(search);
@@ -365,6 +363,20 @@ textarea.style.background=localStorage.getItem("themeb")
 
         alert("not found")
     }
+
+  }
+
+
+
+  function replaceA(){
+     var textarea=document.getElementById("html");
+    var text=textarea.value;
+   
+    var find=prompt("Find");
+   var rep=prompt("Replace");
+   var repl=new RegExp(find, 'g');
+   var findre=text.replace(repl, rep);
+   textarea.value=findre;
   }
 
 
@@ -399,14 +411,15 @@ textarea.style.background=localStorage.getItem("themeb")
         <a class="dropbtn" onclick="document.getElementById('edit').classList.toggle('drop-it');document.getElementById('file').classList.remove('drop-it');document.getElementById('view').classList.remove('drop-it');document.getElementById('tools').classList.remove('drop-it');document.getElementById('terminal').classList.remove('drop-it');document.getElementById('help').classList.remove('drop-it');
     ">Edit</a>
         <div class="dropdown-content" id="edit">
-            <a>Undo</a>
+            <a onclick="window.history.back()">Undo</a>
             <a>Redo</a>
             <a>Cut</a>
             <a onclick="Copy()" id="cpy">Copy</a>
             <a onclick="Paste()">Paste</a>
-            <a onclick="document.getElementById('findy').style.display='block'">Find</a>
+            <a onclick="textFind()">Find &emsp;&emsp;&emsp;&emsp;<small>Ctrl+f</small></a>
             <a>Sort lines</a>
             <a>Wrap</a>
+            <a onclick="replaceA()">Replace</a>
             <a onclick="selectAlly()">Select All</a>
             <a onclick="alert('key : ctrl + /')">Comment</a>
 
@@ -436,19 +449,22 @@ textarea.style.background=localStorage.getItem("themeb")
         const saveas = () => {
     // text content
             const textfield=document.getElementById("html").value;
-
+const userfile=prompt("Save As");
+if(userfile){
     const texts = [`${textfield}`]
+
 // file object
     const file = new Blob(texts, {type: 'text/plain'});
 // anchor link
     const element = document.createElement("a");
-    const userfile=prompt("Save As");
+    
 
     element.href = URL.createObjectURL(file);
     element.download = `${userfile}`;
 // simulate link click
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
+}
 }
 
  function Casep(){
@@ -474,6 +490,15 @@ if(cpy.innerHTML == "Copy"){
     }
 }
 
+function chkk(){
+    var chkk=document.getElementById("chkk");
+
+    if(chkk.checked == false){
+        localStorage.removeItem("html")
+        window.location.reload()
+    }
+}
+
  document.addEventListener("keydown", function(e){
         if(e.ctrlKey && e.key === "/"){
            
@@ -485,6 +510,12 @@ if(cpy.innerHTML == "Copy"){
         
       });
 
+ document.addEventListener("keydown", function(e){
+        if(e.ctrlKey && e.key === "f"){
+           textFind()
+            }
+        
+      });
 function Paste(){
     navigator.clipboard.readText()
 }
@@ -512,7 +543,7 @@ function Paste(){
          <a onclick="alert('Install Sublime !')">Command pallete</a>
          <a onclick="alert('You are not a developer. Access denied')">Developer</a>
          <a onclick="alert('Processing!')">Build with</a>
-         <a>Autosave<input type="checkbox" style="position:absolute; right: 10px;" name="" checked></a>
+         <a>Autosave<input type="checkbox" style="position:absolute; right: 10px;" name="" onchange="chkk()" id="chkk" checked></a>
          <a>Snippets</a>
          <a onclick="alert('not ready !')">Bookmarks</a>
         </div>
@@ -646,6 +677,7 @@ function New(){
     var texa = document.getElementById("html")
 
     texa.value ="<!DOCTYPE html>\n<html>\n<head>\n<meta charset='utf-8'>\n <meta name='viewport' content='width=device-width, initial-scale=1'>\n<title></title>\n</head>\n\n<body>\n\n<p>This is just a text.</p>\n\n</body>\n</html>";
+    
 }
 </script>
 <br>
@@ -712,6 +744,7 @@ function Compile() {
     var space="<head>"
     var texS=document.getElementById("html").value;
   var html = document.getElementById("html");
+  
   var syntax=["<",">"];
   // var css = document.getElementById("css");
   // var js = document.getElementById("js");
@@ -784,6 +817,7 @@ function Compile() {
 // result button js
 
 function myResult(){
+  Compile()
   let result = document.getElementById("dm");
   
      if(result.innerHTML == "Result"){
